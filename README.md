@@ -21,7 +21,7 @@ g++ -std=c++11 yasli.cpp -o yasli
 ./yasli fit -i <input path> -m <model path>  [optional parameters]
 ```
 | Parameter   | Short option | Description | Default value  |
-| ----------- |-------| --|  -------|
+| ----------- |---------------| --------|  -----------------|
 | --input-path|   -i  | The path to the input file with dataset. |Required parameter  |
 | --model-path|   -m  | The path to the file where to save the resulting model. | Required parameter  |
 | --delimiter|   -d  | Delimiter that divides values in the input file. | ","  |
@@ -36,7 +36,7 @@ g++ -std=c++11 yasli.cpp -o yasli
 ./yasli apply  -i <input path>  -m <model path> [optional parameters]
 ```
 | Parameter   | short option | Description | Default value  |
-| ----------- |-------| -----|  -----|
+| ----------- |--------------| ------------| -------------- |
 | --input-path|   -i  | The path to the input file with dataset. |Required parameter  |
 | --model-path|   -m  | The path to the file from where to load the model. | Required parameter  |
 | --delimiter|   -d  | The path to the input file with dataset. | ","  |
