@@ -41,7 +41,7 @@ g++ -std=c++11 yasli.cpp -o yasli
 | --input-path|   -i  | The path to the input file with the dataset. |Required parameter  |
 | --output-path|   -i  | The path to the output file with the predictions. |Required parameter  |
 | --model-path|   -m  | The path to the file from where to load the model. | "model.bin" |
-| --delimiter|   -d  | The path to the input file with dataset. | ","  |
+| --delimiter|   -d  | Delimiter that divides values in the input file. | ","  |
 
 ## Authors
 
