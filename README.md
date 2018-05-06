@@ -42,6 +42,7 @@ g++ -std=c++11 yasli.cpp -o yasli
 | --output-path|   -i  | The path to the output file with the predictions. |Required parameter  |
 | --model-path|   -m  | The path to the file from where to load the model. | "model.bin" |
 | --delimiter|   -d  | Delimiter that divides values in the input file. | ","  |
+| --batch|   -b  | Batch size. | 64 |
 
 ## Authors
 
