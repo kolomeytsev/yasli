@@ -20,9 +20,9 @@ void DataReader::GetData() {
     file.close();
 }
 
-std::pair<std::vector<float>, float> DataReader::GetRow() {
+std::pair<std::vector<float>, int> DataReader::GetRow() {
     int random_index = rand() % data.size();
-    return std::pair<std::vector<float>, float>(data[random_index], target[random_index]);
+    return std::pair<std::vector<float>, int>(data[random_index], (int) target[random_index]);
 }
 
 Batch* DataReader::GetBatch() {

@@ -2,6 +2,7 @@
 #include <fstream>
 #include <vector>
 #include <random>
+#include <string>
 
 #include "loss_functions.hpp"
 #include "optimizers.hpp"
@@ -12,29 +13,84 @@
 
 class Model {
 public:
-    std::vector<float> Fit();
-    Model(LossFunction* loss_function, Optimizer* optimizer, 
-        DataReader* data_reader, int max_iter) :
-        loss_function(loss_function), optimizer(optimizer), 
-        data_reader(data_reader), max_iter(max_iter) {};
+    Model(FitArgs_t fit_args, DataReader* data_reader);
+    void Fit();
+    void Save();
+    void InitWeights(std::vector<float>& weights);
+    void Predict(std::string output_path);
 private:
+    FitArgs_t fit_args;
+    std::vector<float> weights;
     DataReader* data_reader;
     LossFunction* loss_function;
     Optimizer* optimizer;
-    int max_iter;
 };
 
-std::vector<float> Model::Fit() {
-    std::vector<float> weight;
-    weight.resize(data_reader->GetRow().first.size());
-    for (int index = 0; index < max_iter; ++index) {
-        std::pair<std::vector<float>, int> row = data_reader->GetRow();
-        std::vector<float> grad = loss_function->GetGrad(row, weight);
-        weight = optimizer->UpdateWeight(weight, grad);
+Model::Model(FitArgs_t fit_args, DataReader* data_reader) : 
+            fit_args(fit_args), data_reader(data_reader) {
+    if (fit_args.loss == "mse") {
+        loss_function = new MSE();
+    } else if (fit_args.loss == "logistic") {
+            loss_function = new Logistic();
+    } else {
+        printf("unknown loss function\n");
+        std::cout << fit_args.loss << std::endl;
+        exit(1);
     }
-    PrintVector(weight);
+    if (fit_args.optimizer == "sgd") {
+        optimizer = new SGD(fit_args.lr);
+    } else if (fit_args.optimizer == "adagrad") {
+        optimizer = new Adagrad(data_reader->GetRow().first.size(),
+                                fit_args.lr);
+    } else {
+        printf("unknown optimizer\n");
+        exit(1);
+    }
+}
+
+void Model::Fit() {
+    weights.resize(data_reader->GetRow().first.size());
+    for (int index = 0; index < 100; ++index) {
+        std::pair<std::vector<float>, int> row = data_reader->GetRow();
+        std::vector<float> grad = loss_function->GetGrad(row, weights);
+        weights = optimizer->UpdateWeight(weights, grad);
+    }
+    PrintVector(weights);
     std::cout << std::endl;
-    return weight;
+}
+
+void Model::Save() {
+    std::ofstream fout(fit_args.model_path);
+    fout << fit_args.loss <<  " ";
+    fout << fit_args.optimizer <<  " ";
+    fout << fit_args.lr << std::endl;
+    for (auto it=weights.begin(); it!=weights.end() - 1; ++it) {
+        fout << *it <<  " ";
+    }
+    fout << *(weights.end() - 1) << std::endl;
+    fout.close();
+}
+
+void Model::InitWeights(std::vector<float>& new_weights) {
+    weights.resize(new_weights.size());
+    std::copy(new_weights.begin(), new_weights.end(), weights.begin());
+}
+
+void Model::Predict(std::string output_path) {
+    printf("Predicting\n");
+    std::vector<float> prediction;
+
+    // Paste the code here
+
+    prediction.push_back(0.66);
+    prediction.push_back(0.33);
+    prediction.push_back(0.22);
+
+    std::ofstream fout(output_path);
+    for (auto it=prediction.begin(); it!=prediction.end(); ++it) {
+        fout << *it <<  std::endl;
+    }
+    fout.close();
 }
 
 void TestBatch(DataReader* dr, int epochs) {
@@ -57,6 +113,35 @@ void TestBatch(DataReader* dr, int epochs) {
     }
 }
 
+void LoadModel(std::vector<float> &weights, FitArgs_t &fit_args, 
+                std::string model_path) {
+    std::ifstream fin(model_path);
+    fin >> fit_args.loss;
+    fin >> fit_args.optimizer;
+    fin >> fit_args.lr;
+    std::cout << fit_args.lr << std::endl;
+
+    std::vector<float> loaded_weights;
+    float weight;
+    fin >> weight;
+    while (!fin.eof()){
+        loaded_weights.push_back(weight);
+        fin >> weight;
+    }
+    fin.close();
+    weights.resize(loaded_weights.size());
+    std::copy(loaded_weights.begin(), loaded_weights.end(), weights.begin());
+}
+
+void SavePrediction(std::vector<float> &predictions,
+                    std::string output_path) {
+    std::ofstream fout(output_path);
+    for (auto it=predictions.begin(); it!=predictions.end(); ++it) {
+        fout << *it <<  std::endl;
+    }
+    fout.close();
+}
+
 void Fit(int argc, char* argv[]) {
     FitArgs_t fit_args;
     fit_args = ParseFitParameters(argc, argv);
@@ -64,37 +149,24 @@ void Fit(int argc, char* argv[]) {
     DataReader reader(fit_args.input_path, fit_args.batch_size, 
                         fit_args.delimiter);
     reader.GetData();
-    LossFunction* loss_function;
-    Optimizer* optimizer;
-    if (strcmp(fit_args.loss, "mse") == 0) {
-        loss_function = new MSE();
-    } else {
-        if (strcmp(fit_args.loss, "logistic") == 0) {
-            loss_function = new Logistic();
-        } else {
-            printf("unknown loss function\n");
-            exit(1);
-        }
-    }
-    if (strcmp(fit_args.optimizer, "sgd") == 0) {
-        optimizer = new SGD(fit_args.lr);
-    } else {
-        if (strcmp(fit_args.optimizer, "adagrad") == 0) {
-            optimizer = new Adagrad(reader.GetRow().first.size(), fit_args.lr);
-        } else {
-            printf("unknown optimizer\n");
-            exit(1);
-        }
-    }
-    TestBatch(&reader, fit_args.epochs);
-    printf("%d\n", fit_args.epochs);
-    //Model model(loss_function, optimizer, &reader, fit_args.iterations);
-    //model.Fit();
+    Model model(fit_args, &reader);
+    model.Fit();
+    model.Save();
 }
 
 void Apply(int argc, char* argv[]) {
     ApplyArgs_t apply_args;
+    FitArgs_t fit_args;
+    std::vector<float> weights;
+
     apply_args = ParseApplyParameters(argc, argv);
+    DataReader reader(apply_args.input_path, apply_args.batch_size, 
+                        apply_args.delimiter);
+    LoadModel(weights, fit_args, apply_args.model_path);
+    Model model(fit_args, &reader);
+    model.InitWeights(weights);
+
+    model.Predict(apply_args.output_path);
 }
 
 int main(int argc, char* argv[]) {

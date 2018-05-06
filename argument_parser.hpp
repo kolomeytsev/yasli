@@ -2,31 +2,28 @@
 #define argument_parser_hpp
 
 #include <stdio.h>
-#include <string.h>
+#include <string>
 #include <stdlib.h>
 #include <getopt.h>
 
 
 struct FitArgs_t {
-    const char *input_path;
-    const char *model_path = "model.bin";
-    const char *delimiter = ",";
-    const char *loss = "mse";
+    std::string input_path;
+    std::string model_path = "model.bin";
+    std::string delimiter = ",";
+    std::string loss = "mse";
+    std::string optimizer = "sgd";
     float lr = 0.000001;
     int epochs = 100;
     int batch_size = 64;
-    const char *optimizer = "sgd";
 };
 
 struct ApplyArgs_t {
-    const char *input_path;
-    const char *output_path;
-    const char *model_path = "model.bin";
-    const char *delimiter = ",";
-    const char *loss;
-    float lr;
+    std::string input_path;
+    std::string output_path;
+    std::string model_path = "model.bin";
+    std::string delimiter = ",";
     int batch_size = 64;
-    const char *optimizer;
 };
 
 FitArgs_t ParseFitParameters(int argc, char* argv[]);

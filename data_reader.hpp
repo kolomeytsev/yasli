@@ -23,7 +23,7 @@ public:
                 file_name(filename), batch_size(batch_size), 
                 delimeter(delim), current_index(0) {}
     void GetData();
-    std::pair<std::vector<float>, float> GetRow();
+    std::pair<std::vector<float>, int> GetRow();
     Batch* GetBatch();
     
 private:
@@ -37,7 +37,7 @@ private:
     int batch_size;
 };
 
-void PrintRow(std::pair<std::vector<float>, float> row_data);
+void PrintRow(std::pair<std::vector<float>, int> row_data);
 void PrintBatch(Batch* batch);
 
 #include "data_reader.cpp"

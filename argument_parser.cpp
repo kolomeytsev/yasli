@@ -4,7 +4,7 @@
 #define argument_parser_cpp
 
 FitArgs_t ParseFitParameters(int argc, char* argv[]) {
-    const char* short_options = "hi:o:d:l:w:O:e:b:";
+    const char* short_options = "hi:o:m:d:l:w:O:e:b:";
     const struct option long_options[] = {
         {"help",no_argument,NULL,'h'},
         {"input-path",required_argument,NULL,'i'},
@@ -64,7 +64,7 @@ FitArgs_t ParseFitParameters(int argc, char* argv[]) {
             }
             default: {
                 printf("found unknown option\n");
-                break;
+                exit(1);
             }
         }
     }
@@ -72,17 +72,13 @@ FitArgs_t ParseFitParameters(int argc, char* argv[]) {
 }
 
 ApplyArgs_t ParseApplyParameters(int argc, char* argv[]) {
-    const char* short_options = "hi:o:d:l:w:O:e:b:";
+    const char* short_options = "hi:o:d:b:";
     const struct option long_options[] = {
         {"help",no_argument,NULL,'h'},
         {"input-path",required_argument,NULL,'i'},
         {"output-path",required_argument,NULL,'o'},
         {"model-path",required_argument,NULL,'m'},
         {"delimiter",required_argument,NULL,'d'},
-        {"loss-function",required_argument,NULL,'l'},
-        {"optimizer",required_argument,NULL,'O'},
-        {"learning-rate",required_argument,NULL,'w'},
-        {"epochs",required_argument,NULL,'e'},
         {"batch",required_argument,NULL,'b'},
         {NULL,0,NULL,0}
     };
@@ -115,25 +111,13 @@ ApplyArgs_t ParseApplyParameters(int argc, char* argv[]) {
                 apply_args.delimiter = optarg;
                 break;
             }
-            case 'l': {
-                apply_args.loss = optarg;
-                break;
-            }
-            case 'w': {
-                apply_args.lr = std::stof(optarg);
-                break;
-            }
-            case 'O': {
-                apply_args.optimizer = optarg;
-                break;
-            }
             case 'b': {
                 apply_args.batch_size = std::stoi(optarg);
                 break;
             }
             default: {
                 printf("found unknown option\n");
-                break;
+                exit(1);
             }
         }
     }
