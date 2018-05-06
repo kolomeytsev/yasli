@@ -39,7 +39,7 @@ g++ -std=c++11 yasli.cpp -o yasli
 | Parameter   | short option | Description | Default value  |
 | ----------- |--------------| ------------| -------------- |
 | --input-path|   -i  | The path to the input file with the dataset. |Required parameter  |
-| --output-path|   -i  | The path to the output file with the predictions. |Required parameter  |
+| --output-path|   -o  | The path to the output file with the predictions. |Required parameter  |
 | --model-path|   -m  | The path to the file from where to load the model. | "model.bin" |
 | --delimiter|   -d  | Delimiter that divides values in the input file. | ","  |
 | --batch|   -b  | Batch size. | 64 |
