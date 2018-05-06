@@ -22,13 +22,14 @@ g++ -std=c++11 yasli.cpp -o yasli
 ```
 | Parameter   | Short option | Description | Default value  |
 | ----------- |---------------| --------|  -----------------|
-| --input-path|   -i  | The path to the input file with dataset. |Required parameter  |
-| --model-path|   -m  | The path to the file where to save the resulting model. | Required parameter  |
+| --input-path|   -i  | The path to the input file with the dataset. |Required parameter  |
+| --model-path|   -m  | The path to the file where to save the resulting model. | "model.bin" |
 | --delimiter|   -d  | Delimiter that divides values in the input file. | ","  |
-| --loss-function|   -l  |The metric to use in training. Possible values: "mse", "adagrad". | "mse"  |
-| --optimizer|   -O  | Optimizer.  Possible values: "sgd", "logistic". | "sgd"  |
+| --loss-function|   -l  |The metric to use in training. Possible values: "mse", "logistic". | "mse"  |
+| --optimizer|   -O  | Optimizer.  Possible values: "sgd", "adagrad" | "sgd"  |
 | --learning-rate|   -w  | The learning rate. | 0.000001  |
-| --iterations|   -I  | The maximum number of iterations of optimization. |5000000  |
+| --epochs|   -e  | The number of times the algorithm will cycle over the data. |100 |
+| --batch|   -b  | Size of a batch. | 64 |
 
 
 ### Applying a model
@@ -37,8 +38,9 @@ g++ -std=c++11 yasli.cpp -o yasli
 ```
 | Parameter   | short option | Description | Default value  |
 | ----------- |--------------| ------------| -------------- |
-| --input-path|   -i  | The path to the input file with dataset. |Required parameter  |
-| --model-path|   -m  | The path to the file from where to load the model. | Required parameter  |
+| --input-path|   -i  | The path to the input file with the dataset. |Required parameter  |
+| --output-path|   -i  | The path to the output file with the predictions. |Required parameter  |
+| --model-path|   -m  | The path to the file from where to load the model. | "model.bin" |
 | --delimiter|   -d  | The path to the input file with dataset. | ","  |
 
 ## Authors
