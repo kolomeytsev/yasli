@@ -37,11 +37,32 @@ std::vector<float> Model::Fit() {
     return weight;
 }
 
+void TestBatch(DataReader* dr, int epochs) {
+    DataReader* data_reader = dr;
+    Batch* batch;
+    bool done;
+    int index;
+    for (int epoch = 0; epoch < epochs; ++epoch) {
+        done = false;
+        index = 1;
+        printf("epoch number: %d\n", epoch + 1);
+        while (!done) {
+            batch = data_reader->GetBatch();
+            done = batch->last_batch;
+            printf("batch number: %d\n", index);
+            PrintBatch(batch);
+            index++;
+        }
+        printf("epoch ended\n");
+    }
+}
+
 void Fit(int argc, char* argv[]) {
     FitArgs_t fit_args;
     fit_args = ParseFitParameters(argc, argv);
 
-    DataReader reader(fit_args.input_path, fit_args.delimiter);
+    DataReader reader(fit_args.input_path, fit_args.batch_size, 
+                        fit_args.delimiter);
     reader.GetData();
     LossFunction* loss_function;
     Optimizer* optimizer;
@@ -65,8 +86,10 @@ void Fit(int argc, char* argv[]) {
             exit(1);
         }
     }
-    Model model(loss_function, optimizer, &reader, fit_args.iterations);
-    model.Fit();
+    TestBatch(&reader, fit_args.epochs);
+    printf("%d\n", fit_args.epochs);
+    //Model model(loss_function, optimizer, &reader, fit_args.iterations);
+    //model.Fit();
 }
 
 void Apply(int argc, char* argv[]) {

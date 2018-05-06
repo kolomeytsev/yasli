@@ -11,10 +11,11 @@ struct FitArgs_t {
     const char *input_path;
     const char *model_path = "model.bin";
     const char *delimiter = ",";
-    const char *loss = "MSE";
+    const char *loss = "mse";
     float lr = 0.000001;
-    int iterations = 5000000;
-    const char *optimizer = "SGD";
+    int epochs = 100;
+    int batch_size = 64;
+    const char *optimizer = "sgd";
 };
 
 struct ApplyArgs_t {
@@ -24,7 +25,7 @@ struct ApplyArgs_t {
     const char *delimiter = ",";
     const char *loss;
     float lr;
-    int iterations;
+    int batch_size = 64;
     const char *optimizer;
 };
 

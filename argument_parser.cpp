@@ -4,7 +4,7 @@
 #define argument_parser_cpp
 
 FitArgs_t ParseFitParameters(int argc, char* argv[]) {
-    const char* short_options = "hi:o:d:l:w:O:I:";
+    const char* short_options = "hi:o:d:l:w:O:e:b:";
     const struct option long_options[] = {
         {"help",no_argument,NULL,'h'},
         {"input-path",required_argument,NULL,'i'},
@@ -13,7 +13,8 @@ FitArgs_t ParseFitParameters(int argc, char* argv[]) {
         {"loss-function",required_argument,NULL,'l'},
         {"optimizer",required_argument,NULL,'O'},
         {"learning-rate",required_argument,NULL,'w'},
-        {"iterations",required_argument,NULL,'I'},
+        {"epochs",required_argument,NULL,'e'},
+        {"batch",required_argument,NULL,'b'},
         {NULL,0,NULL,0}
     };
 
@@ -53,8 +54,12 @@ FitArgs_t ParseFitParameters(int argc, char* argv[]) {
                 fit_args.optimizer = optarg;
                 break;
             }
-            case 'I': {
-                fit_args.iterations = std::stoi(optarg);
+            case 'e': {
+                fit_args.epochs = std::stoi(optarg);
+                break;
+            }
+            case 'b': {
+                fit_args.batch_size = std::stoi(optarg);
                 break;
             }
             default: {
@@ -67,16 +72,18 @@ FitArgs_t ParseFitParameters(int argc, char* argv[]) {
 }
 
 ApplyArgs_t ParseApplyParameters(int argc, char* argv[]) {
-    const char* short_options = "hi:o:d:l:w:O:I:";
+    const char* short_options = "hi:o:d:l:w:O:e:b:";
     const struct option long_options[] = {
         {"help",no_argument,NULL,'h'},
         {"input-path",required_argument,NULL,'i'},
+        {"output-path",required_argument,NULL,'o'},
         {"model-path",required_argument,NULL,'m'},
         {"delimiter",required_argument,NULL,'d'},
         {"loss-function",required_argument,NULL,'l'},
         {"optimizer",required_argument,NULL,'O'},
         {"learning-rate",required_argument,NULL,'w'},
-        {"iterations",required_argument,NULL,'I'},
+        {"epochs",required_argument,NULL,'e'},
+        {"batch",required_argument,NULL,'b'},
         {NULL,0,NULL,0}
     };
 
@@ -118,6 +125,10 @@ ApplyArgs_t ParseApplyParameters(int argc, char* argv[]) {
             }
             case 'O': {
                 apply_args.optimizer = optarg;
+                break;
+            }
+            case 'b': {
+                apply_args.batch_size = std::stoi(optarg);
                 break;
             }
             default: {
