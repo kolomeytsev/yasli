@@ -29,7 +29,8 @@ g++ -std=c++11 yasli.cpp -o yasli
 | --optimizer|   -O  | Optimizer.  Possible values: "sgd", "adagrad" | "sgd"  |
 | --learning-rate|   -w  | The learning rate. | 0.000001  |
 | --epochs|   -e  | The number of times the algorithm will cycle over the data. |100 |
-| --batch|   -b  | Batch size. | 64 |
+| --batch|   -B  | Batch size. | 64 |
+| --bits|   -b  | The number of bits in the feature table. | 24 |
 
 
 ### Applying a model
