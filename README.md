@@ -31,7 +31,7 @@ g++ -std=c++11 yasli.cpp -o yasli
 | --epochs|   -e  | The number of times the algorithm will cycle over the data. |100 |
 | --batch|   -B  | Batch size. | 64 |
 | --bits|   -b  | The number of bits in the feature table. | 24 |
-| --config|   -c  | The path to the config file with indices of categorical features. | Required parameter |
+| --config|   -c  | The path to the config file with indices of categorical features. | "" |
 
 
 ### Applying a model
@@ -45,7 +45,7 @@ g++ -std=c++11 yasli.cpp -o yasli
 | --model-path|   -m  | The path to the file from where to load the model. | "model.bin" |
 | --delimiter|   -d  | Delimiter that divides values in the input file. | ","  |
 | --batch|   -b  | Batch size. | 64 |
-| --config|   -c  | The path to the config file with indices of categorical features. | Required parameter |
+| --config|   -c  | The path to the config file with indices of categorical features. | "" |
 
 ## Authors
 
