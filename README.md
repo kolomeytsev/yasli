@@ -24,7 +24,7 @@ g++ -std=c++11 yasli.cpp -o yasli
 | ----------- |---------------| --------|  -----------------|
 | --input-path|   -i  | The path to the input file with the dataset. |Required parameter  |
 | --model-path|   -m  | The path to the file where to save the resulting model. | "model.bin" |
-| --config|   -c  | The path to the config file with indices of categorical features. | "" |
+| --config|   -c  | The path to the config file with indices of categorical features. | "" (no categorical features) |
 | --delimiter|   -d  | Delimiter that divides values in the input file. | ","  |
 | --loss-function|   -l  |The metric to use in training. Possible values: "mse", "logistic". | "mse"  |
 | --optimizer|   -O  | Optimizer.  Possible values: "sgd", "adagrad" | "sgd"  |
@@ -43,7 +43,7 @@ g++ -std=c++11 yasli.cpp -o yasli
 | --input-path|   -i  | The path to the input file with the dataset. |Required parameter  |
 | --output-path|   -o  | The path to the output file with the predictions. |Required parameter  |
 | --model-path|   -m  | The path to the file from where to load the model. | "model.bin" |
-| --config|   -c  | The path to the config file with indices of categorical features. | "" |
+| --config|   -c  | The path to the config file with indices of categorical features. | "" (no categorical features) |
 | --delimiter|   -d  | Delimiter that divides values in the input file. | ","  |
 | --batch|   -b  | Batch size. | 64 |
 
