@@ -4,7 +4,7 @@
 #define argument_parser_cpp
 
 FitArgs_t ParseFitParameters(int argc, char* argv[]) {
-    const char* short_options = "hi:o:m:d:l:w:O:e:b:";
+    const char* short_options = "hi:o:m:d:l:w:O:e:B:b:c:";
     const struct option long_options[] = {
         {"help",no_argument,NULL,'h'},
         {"input-path",required_argument,NULL,'i'},
@@ -14,17 +14,19 @@ FitArgs_t ParseFitParameters(int argc, char* argv[]) {
         {"optimizer",required_argument,NULL,'O'},
         {"learning-rate",required_argument,NULL,'w'},
         {"epochs",required_argument,NULL,'e'},
-        {"batch",required_argument,NULL,'b'},
+        {"batch",required_argument,NULL,'B'},
+        {"bits",required_argument,NULL,'b'},
+        {"config",required_argument,NULL,'c'},
         {NULL,0,NULL,0}
     };
-
+    
     int opt;
     int option_index;
     FitArgs_t fit_args;
-
+    
     while ((opt = getopt_long(argc, argv, short_options,
-            long_options, &option_index)) != -1){
-
+                              long_options, &option_index)) != -1){
+        
         switch(opt) {
             case 'h': {
                 printf("Help:\n");
@@ -58,8 +60,16 @@ FitArgs_t ParseFitParameters(int argc, char* argv[]) {
                 fit_args.epochs = std::stoi(optarg);
                 break;
             }
-            case 'b': {
+            case 'B': {
                 fit_args.batch_size = std::stoi(optarg);
+                break;
+            }
+            case 'b': {
+                fit_args.bit_precision = std::stoi(optarg);
+                break;
+            }
+            case 'c': {
+                fit_args.config_path = optarg;
                 break;
             }
             default: {
@@ -72,24 +82,25 @@ FitArgs_t ParseFitParameters(int argc, char* argv[]) {
 }
 
 ApplyArgs_t ParseApplyParameters(int argc, char* argv[]) {
-    const char* short_options = "hi:o:d:b:";
+    const char* short_options = "hi:o:m:d:B:c:";
     const struct option long_options[] = {
         {"help",no_argument,NULL,'h'},
         {"input-path",required_argument,NULL,'i'},
         {"output-path",required_argument,NULL,'o'},
         {"model-path",required_argument,NULL,'m'},
         {"delimiter",required_argument,NULL,'d'},
-        {"batch",required_argument,NULL,'b'},
+        {"batch",required_argument,NULL,'B'},
+        {"config",required_argument,NULL,'c'},
         {NULL,0,NULL,0}
     };
-
+    
     int opt;
     int option_index;
     ApplyArgs_t apply_args;
-
+    
     while ((opt = getopt_long(argc, argv, short_options,
-            long_options, &option_index)) != -1){
-
+                              long_options, &option_index)) != -1){
+        
         switch(opt) {
             case 'h': {
                 printf("Help:\n");
@@ -111,8 +122,12 @@ ApplyArgs_t ParseApplyParameters(int argc, char* argv[]) {
                 apply_args.delimiter = optarg;
                 break;
             }
-            case 'b': {
+            case 'B': {
                 apply_args.batch_size = std::stoi(optarg);
+                break;
+            }
+            case 'c': {
+                apply_args.config_path = optarg;
                 break;
             }
             default: {

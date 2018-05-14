@@ -6,17 +6,17 @@
 
 std::vector< std::pair<std::vector<float>, float> > ReadData() {
     std::ifstream file("test_data.txt");
-    
+
     std::vector< std::pair<std::vector<float>, float> > data;
     int count;
     file >> count;
     data.reserve(count);
-    
+
     int len;
     file >> len;
-    
+
     std::cout << count << ' ' << len << std::endl;
-    
+
     for (int index = 0; index < count; ++index) {
         std::vector<float> X;
         X.reserve(len);

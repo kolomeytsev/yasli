@@ -5,19 +5,25 @@
 #include <vector>
 #include <algorithm>
 #include <functional>
+#include <unordered_map>
 #include "printer.hpp"
+
 
 class Optimizer {
 public:
-    virtual std::vector<float> UpdateWeight(const std::vector<float>& weight,
-                                           const std::vector<float>& grad) = 0;
+    virtual void UpdateWeight(std::vector<float>* weight,
+                              std::vector<float>* weight_cat,
+                              const std::vector<float>& grad,
+                              const std::unordered_map<uint64_t, float>& grad_cat) = 0;
 };
 
 class SGD : public Optimizer {
 public:
     SGD(float lr): learning_rate(lr) {}
-    std::vector<float> UpdateWeight(const std::vector<float>& weight,
-                                  const std::vector<float>& grad);
+    void UpdateWeight(std::vector<float>* weight,
+                      std::vector<float>* weight_cat,
+                      const std::vector<float>& grad,
+                      const std::unordered_map<uint64_t, float>& grad_cat);
 private:
     float learning_rate;
 };
@@ -25,8 +31,10 @@ private:
 class Adagrad : public Optimizer {
 public:
     Adagrad(int size, float lr);
-    std::vector<float> UpdateWeight(const std::vector<float>& weight,
-                                  const std::vector<float>& grad);
+    void UpdateWeight(std::vector<float>* weight,
+                      std::vector<float>* weight_cat,
+                      const std::vector<float>& grad,
+                      const std::unordered_map<uint64_t, float>& grad_cat);
 private:
     std::vector<float> cumutative_gradient;
     double epsilon;
