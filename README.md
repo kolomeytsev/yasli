@@ -48,6 +48,40 @@ g++ -std=c++11 yasli.cpp -o yasli
 | --batch|   -b  | Batch size. | 64 |
 
 
+### Benchmarking
+
+#### Avazu Dataset (https://www.kaggle.com/c/avazu-ctr-prediction)
+
+##### SGD
+|               | Yasli        |Vowpal Wabbit|Liblinear       |
+| ------------- |--------------| ------------| -------------- |
+| fit time      |  4m57.680s    |   3m54.729s  |   12m2.031s    |
+| apply time    |  3m4.265s  |    1m57.846s  |      -         |
+| ROC AUC score |              |    0.65     |    0.6511019   |
+
+##### Adaptive
+|               | Yasli        |Vowpal Wabbit|Liblinear       |
+| ------------- |--------------| ------------| -------------- |
+| fit time      |  4m48.680s    |  3m41.199s  |   13m35.433s   |
+| apply time    |  3m6.199s    |  2m0.575s   |      -         |
+| ROC AUC score |   0.73076    |   0.735663  |   0.723977     |
+
+#### Criteo Dataset (http://labs.criteo.com/2014/02/kaggle-display-advertising-challenge-dataset/)
+
+##### SGD
+|               | Yasli        |Vowpal Wabbit|Liblinear       |
+| ------------- |--------------| ------------| -------------- |
+| fit time      |  9m51.092s    |  4m4.163s  |   -    |
+| apply time    |   2m59.514s |    2m23.315s  |      -         |
+| ROC AUC score |    0.57402    |   0.56402     |    -   |
+
+##### Adaptive
+|               | Yasli        |Vowpal Wabbit|Liblinear     |
+| ------------- |--------------| ------------| ------------ |
+| fit time      |  9m48.680s   |  3m48.278s |   79m58.181s   |
+| apply time    |  2m6.199s    |  2m1.829s |      -      |
+| ROC AUC score |   0.73076    |   0.727919  |   0.4951   |
+
 ## Authors
 
 * **Alexander Sakhnov**
