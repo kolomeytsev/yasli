@@ -48,9 +48,9 @@ g++ -std=c++11 yasli.cpp -o yasli
 | --batch|   -b  | Batch size. | 64 |
 
 
-### Benchmarking
+## Benchmarking
 
-#### Avazu Dataset (https://www.kaggle.com/c/avazu-ctr-prediction)
+### Avazu Dataset (https://www.kaggle.com/c/avazu-ctr-prediction)
 
 ##### SGD
 |               | Yasli        |Vowpal Wabbit|Liblinear       |
@@ -66,7 +66,7 @@ g++ -std=c++11 yasli.cpp -o yasli
 | apply time    |  3m6.199s    |  2m0.575s   |      -         |
 | ROC AUC score |   0.73076    |   0.735663  |   0.723977     |
 
-#### Criteo Dataset (http://labs.criteo.com/2014/02/kaggle-display-advertising-challenge-dataset/)
+### Criteo Dataset (http://labs.criteo.com/2014/02/kaggle-display-advertising-challenge-dataset/)
 
 ##### SGD
 |               | Yasli        |Vowpal Wabbit|Liblinear       |
