@@ -1,10 +1,11 @@
-#include "argument_parser.hpp"
+#include <stdlib.h>
+#include <getopt.h>
+#include <stdio.h>
 
-#ifndef argument_parser_cpp
-#define argument_parser_cpp
+#include "argument_parser.h"
 
-FitArgs_t ParseFitParameters(int argc, char* argv[]) {
-    const char* short_options = "hi:o:m:d:l:w:O:e:B:b:c:";
+FitArgs ParseFitParameters(int argc, char* argv[]) {
+    const char* short_options = "hi:o:m:d:l:w:O:e:B:b:c:0:1:2:3:";
     const struct option long_options[] = {
         {"help",no_argument,NULL,'h'},
         {"input-path",required_argument,NULL,'i'},
@@ -17,12 +18,16 @@ FitArgs_t ParseFitParameters(int argc, char* argv[]) {
         {"batch",required_argument,NULL,'B'},
         {"bits",required_argument,NULL,'b'},
         {"config",required_argument,NULL,'c'},
+        {"ftrl_alpha",required_argument,NULL,0},
+        {"ftrl_beta",required_argument,NULL,1},
+        {"l1",required_argument,NULL,2},
+        {"l2",required_argument,NULL,3},
         {NULL,0,NULL,0}
     };
     
     int opt;
     int option_index;
-    FitArgs_t fit_args;
+    FitArgs fit_args;
     
     while ((opt = getopt_long(argc, argv, short_options,
                               long_options, &option_index)) != -1){
@@ -72,6 +77,22 @@ FitArgs_t ParseFitParameters(int argc, char* argv[]) {
                 fit_args.config_path = optarg;
                 break;
             }
+            case 0: {
+                fit_args.ftrl_alpha = std::stof(optarg);
+                break;
+            }
+            case 1: {
+                fit_args.ftrl_beta = std::stof(optarg);
+                break;
+            }
+            case 2: {
+                fit_args.l1 = std::stof(optarg);
+                break;
+            }
+            case 3: {
+                fit_args.l2 = std::stof(optarg);
+                break;
+            }
             default: {
                 printf("found unknown option\n");
                 exit(1);
@@ -81,7 +102,7 @@ FitArgs_t ParseFitParameters(int argc, char* argv[]) {
     return fit_args;
 }
 
-ApplyArgs_t ParseApplyParameters(int argc, char* argv[]) {
+ApplyArgs ParseApplyParameters(int argc, char* argv[]) {
     const char* short_options = "hi:o:m:d:B:c:";
     const struct option long_options[] = {
         {"help",no_argument,NULL,'h'},
@@ -96,7 +117,7 @@ ApplyArgs_t ParseApplyParameters(int argc, char* argv[]) {
     
     int opt;
     int option_index;
-    ApplyArgs_t apply_args;
+    ApplyArgs apply_args;
     
     while ((opt = getopt_long(argc, argv, short_options,
                               long_options, &option_index)) != -1){
@@ -138,5 +159,3 @@ ApplyArgs_t ParseApplyParameters(int argc, char* argv[]) {
     }
     return apply_args;
 }
-
-#endif // argument_parser_cpp

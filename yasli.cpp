@@ -3,24 +3,24 @@
 #include <vector>
 #include <random>
 #include <string>
+#include <string.h>
 
-#include "loss_functions.hpp"
-#include "optimizers.hpp"
-#include "printer.hpp"
-#include "data_reader.hpp"
-#include "argument_parser.hpp"
-
+#include "loss_functions.h"
+#include "optimizers.h"
+#include "data_reader.h"
+#include "argument_parser.h"
 
 class Model {
 public:
-    Model(FitArgs_t fit_args, DataReader* data_reader);
+    Model(FitArgs fit_args, DataReader* data_reader);
+    ~Model();
     void Fit();
     void Save();
     void InitWeights(std::vector<float>& new_weights, 
                     std::vector<float> &new_weights_cat);
     void Predict(std::string output_path);
 private:
-    FitArgs_t fit_args;
+    FitArgs fit_args;
     std::vector<float> weights;
     std::vector<float> weights_cat;
     DataReader* data_reader;
@@ -32,7 +32,7 @@ private:
 
 void TestBatchIteration(BatchIterator* batch_iter);
 
-Model::Model(FitArgs_t fit_args, DataReader* data_reader) :
+Model::Model(FitArgs fit_args, DataReader* data_reader) :
 fit_args(fit_args), data_reader(data_reader) {
     weights.resize(data_reader->GetNumericFeaturesNumber());
     weights_cat.resize(1 << fit_args.bit_precision);
@@ -41,7 +41,7 @@ fit_args(fit_args), data_reader(data_reader) {
     } else if (fit_args.loss == "logistic") {
         loss_function = new Logistic();
     } else {
-        printf("unknown loss function\n");
+        std::cout << "unknown loss function" << std::endl;
         std::cout << fit_args.loss << std::endl;
         exit(1);
     }
@@ -50,10 +50,25 @@ fit_args(fit_args), data_reader(data_reader) {
     } else if (fit_args.optimizer == "adagrad") {
         optimizer = new Adagrad(data_reader->GetNumericFeaturesNumber() +
                                 (1 << fit_args.bit_precision), fit_args.lr);
+    } else if (fit_args.optimizer == "ftrl") {
+        if (fit_args.loss != "logistic") {
+            std::cout << "bad loss function: for ftrl method use logistic";
+            std::cout << std::endl;
+            exit(1);
+        }
+        optimizer = new Ftrl(fit_args.lr, fit_args.ftrl_alpha, fit_args.ftrl_beta,
+                                fit_args.l1, fit_args.l2,
+                                data_reader->GetNumericFeaturesNumber(),
+                                1 << fit_args.bit_precision);
     } else {
         printf("unknown optimizer\n");
         exit(1);
     }
+}
+
+Model::~Model() {
+    delete loss_function;
+    delete optimizer;
 }
 
 void Model::Fit() {
@@ -65,19 +80,17 @@ void Model::Fit() {
         while (!last_batch) {
             BatchIterator* batch_iter = data_reader->GetBatchIterator();
             last_batch = batch_iter->last_batch;
-            //TestBatchIteration(batch_iter);
-            std::fill(grad.begin(), grad.end(), 0);
-            std::unordered_map<uint64_t, float> grad_cat;
-            loss_function->GetBatchGrad(&grad, &grad_cat, batch_iter, weights, weights_cat);
-            optimizer->UpdateWeight(&weights, &weights_cat, grad, grad_cat);
+            if (fit_args.optimizer == "ftrl") {
+                optimizer->UpdateWeightFtrl(&weights, &weights_cat, batch_iter);
+            } else {
+                std::fill(grad.begin(), grad.end(), 0);
+                std::unordered_map<uint64_t, float> grad_cat;
+                loss_function->GetBatchGrad(&grad, &grad_cat, batch_iter, weights, weights_cat);
+                optimizer->UpdateWeight(&weights, &weights_cat, grad, grad_cat);
+            }
             delete batch_iter;
         }
     }
-    std::cout << "weights" << std::endl;
-    PrintVector(weights);
-    std::cout << "weights_cat" << std::endl;
-    PrintVector(weights_cat);
-    std::cout << std::endl;
 }
 
 void Model::Save() {
@@ -137,16 +150,6 @@ std::vector<float> Model::PredictBatch(BatchIterator *batch_iter) {
         ++data_cat_it;
         predictions.push_back(prediction);
     }
-
-    /*
-    for (int index = 0; index < len; ++index) {
-        float prediction = std::inner_product(weights.begin(), weights.end(), batch->data[index].begin(), 0.0);
-        for(uint64_t local_index : batch->data_cat[index]) {
-            prediction += weights_cat[local_index];
-        }
-        predictions.push_back(prediction);
-    }
-    */
     return predictions;
 }
 
@@ -198,7 +201,7 @@ void TestBatchIteration(BatchIterator* batch_iter) {
 
 void LoadModel(std::vector<float> &weights, std::vector<float> &weights_cat, 
                std::vector<std::string> &feature_names,
-               FitArgs_t &fit_args, std::string model_path) {
+               FitArgs &fit_args, std::string model_path) {
     std::ifstream fin(model_path);
     fin >> fit_args.loss;
     fin >> fit_args.optimizer;
@@ -206,7 +209,6 @@ void LoadModel(std::vector<float> &weights, std::vector<float> &weights_cat,
     fin >> fit_args.bit_precision;
     
     uint64_t size;
-    float weight;
     fin >> size;
     weights.resize(size);
     for (uint64_t i = 0; i < size; ++i) {
@@ -237,7 +239,7 @@ void SavePrediction(std::vector<float> &predictions,
 }
 
 void Fit(int argc, char* argv[]) {
-    FitArgs_t fit_args;
+    FitArgs fit_args;
     fit_args = ParseFitParameters(argc, argv);
     DataReader reader(fit_args.input_path, fit_args.config_path,
                       fit_args.batch_size, fit_args.bit_precision, fit_args.delimiter);
@@ -247,8 +249,8 @@ void Fit(int argc, char* argv[]) {
 }
 
 void Apply(int argc, char* argv[]) {
-    ApplyArgs_t apply_args;
-    FitArgs_t fit_args;
+    ApplyArgs apply_args;
+    FitArgs fit_args;
     std::vector<float> weights;
     std::vector<float> weights_cat;
     std::vector<std::string> feature_names;

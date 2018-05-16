@@ -1,12 +1,20 @@
-#include "data_reader.hpp"
+#include <iostream>
+#include <stdlib.h>
+#include <utility>
+#include <algorithm>
+#include <boost/algorithm/string.hpp>
 
-#ifndef data_reader_cpp
-#define data_reader_cpp
+#include "murmur_hash3.h"
+#include "data_reader.h"
 
-DataReader::DataReader(std::string filename, std::string config_path, int batch_size, 
-                    uint64_t bit_precision, std::string delim, bool generate_names) :
-            file_name(filename), config_path(config_path), batch_size(batch_size), 
-            bit_precision(bit_precision), delimeter(delim), current_index(0) {
+DataReader::DataReader(std::string filename, std::string config, uint64_t batchsize, 
+                    uint64_t bit_prec, std::string delim, bool generate_names) {
+    file_name = filename;
+    config_path = config;
+    batch_size = batchsize;
+    bit_precision = bit_prec;
+    delimeter = delim;
+    current_index = 0;
     chrs = "0123456789"
         "abcdefghijklmnopqrstuvwxyz"
         "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -289,5 +297,3 @@ void PrintBatchInFile(Batch* batch, std::string output_file) {
     fout << std::endl;
     fout << std::endl;
 }
-
-#endif // data_reader_cpp

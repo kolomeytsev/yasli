@@ -1,7 +1,10 @@
-#include "loss_functions.hpp"
+#include <algorithm>
+#include <numeric>
+#include <cmath>
+#include <iostream>
 
-#ifndef loss_functions_cpp
-#define loss_functions_cpp
+#include "loss_functions.h"
+#include "data_reader.h"
 
 void LossFunction::GetBatchGrad(std::vector<float>* grad,
                                 std::unordered_map<uint64_t, float>* grad_cat,
@@ -101,12 +104,3 @@ void Logistic::GetGrad(std::vector<float>* grad,
         }
     }
 }
-
-//float Logistic::GetLoss(const std::vector<std::vector<float>>& data,
-//                        const std::vector<float>& label,
-//                        const std::vector<float>& weight) {
-//    return 0;
-//}
-
-
-#endif // loss_functions_cpp
