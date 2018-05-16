@@ -87,16 +87,16 @@ $ ./yasli apply  -i <input path>  -o <output path> [optional parameters]
 ##### SGD
 |               | Yasli        |Vowpal Wabbit|Liblinear       |
 | ------------- |--------------| ------------| -------------- |
-| fit time      |  4m44.840s    |   4m15.223s  |  -    |
-| apply time    |  2m3.056s |    2m8.978s |      -         |
-| ROC AUC score |   0.72548     |   0.727919  |   -  |
+| fit time      |  4m44.840s    |   4m15.223s  | 15m16.911s   |
+| apply time    |  2m3.056s |    2m8.978s |     0m23.646s        |
+| ROC AUC score |   0.72548     |   0.727919  |   0.53872  |
 
 ##### Adaptive
-|               | Yasli        |Vowpal Wabbit|Liblinear       |
-| ------------- |--------------| ------------| -------------- |
-| fit time      | 4m34.449s   |  3m41.199s  |   -   |
-| apply time    |  2m3.847s    |  2m0.575s   |      -         |
-| ROC AUC score |   0.731246    |   0.735663  |   -    |
+|               | Yasli        |Vowpal Wabbit|
+| ------------- |--------------| ------------|
+| fit time      | 4m34.449s   |  3m41.199s  |
+| apply time    |  2m3.847s    |  2m0.575s   |
+| ROC AUC score |   0.731246    |   0.735663 |
 
 ##### FTRL
 |               | Yasli        |Vowpal Wabbit  |
@@ -108,18 +108,18 @@ $ ./yasli apply  -i <input path>  -o <output path> [optional parameters]
 ### Criteo Dataset (http://labs.criteo.com/2014/02/kaggle-display-advertising-challenge-dataset/)
 
 ##### SGD
-|               | Yasli        |Vowpal Wabbit|Liblinear       |
+|               | Yasli        |Vowpal Wabbit|Liblinear    |
 | ------------- |--------------| ------------| -------------- |
-| fit time      |  9m10.360s   |  4m4.163s  |   -    |
-| apply time    |   2m58.486s |   2m24.252s |      -         |
-| ROC AUC score |    0.61391   |   0.56402     |    -   |
+| fit time      |  9m10.360s   |  4m4.163s  |   190m30.584s   |
+| apply time    |   2m58.486s |   2m24.252s |      0m47.897s         |
+| ROC AUC score |    0.61391   |   0.56402     |    0.63074   |
 
 ##### Adaptive
-|               | Yasli        |Vowpal Wabbit|Liblinear     |
-| ------------- |--------------| ------------| ------------ |
-| fit time      |  9m46.675s   |  3m48.278s |   -   |
-| apply time    |  2m59.447s   |  2m23.315s |      -      |
-| ROC AUC score |   0.71296    |   0.77459475  |   -   |
+|               | Yasli        |Vowpal Wabbit|
+| ------------- |--------------| ------------|
+| fit time      |  9m46.675s   |  3m48.278s |
+| apply time    |  2m59.447s   |  2m23.315s |
+| ROC AUC score |   0.71296    |   0.77459475  |
 
 ##### FTRL
 |               | Yasli        |Vowpal Wabbit  |
