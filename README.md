@@ -11,7 +11,7 @@ Yet Another Scalable Linear Model (project for LSML course at YSDA).
  2. Поддержка оптимизаторов:
    * SGD
    * Adagrad
-   * Ftrl-proximal
+   * FTRL-Proximal
  3. Поддержка функций потерь:
    * MSE (регрессия)
    * Logistic (классификация)
@@ -22,7 +22,7 @@ Yet Another Scalable Linear Model (project for LSML course at YSDA).
 ### Формат входных данных:
   - 1-й столбец - метки классов (-1 или 1) или числовое значение ответов регрессии.
   - Остальные столбцы - численные или строковые значения признаков через разделитель, который передается через флаг --delimiter (-d).
-  - Категориальные признаки должны быть отмечены в конфигурационном файле, как индексы столбцов во входном файле начиная с 0 (0 индекс имеет 1-й столбец с метками). Путь до конфиг файла передется через флаг --config (-c).
+  - Категориальные признаки должны быть отмечены в конфигурационном файле, как индексы столбцов во входном файле, начиная с 0 (0-ой индекс имеет 1-й столбец с метками). Путь до конфиг файла передется через флаг --config (-c).
 
 Ниже располагается информация об установке программы, о запуске обучения и применения со всеми флагами, а также результаты сравнения ее с другими аналогами: vowpal wabbit и liblinear на датасетах Criteo и Avazu.
 
@@ -78,37 +78,55 @@ $ ./yasli apply  -i <input path>  -o <output path> [optional parameters]
 
 ## Benchmarking
 
+В данном разделе располагается сравнение 3-х систем для обучения линейных моделей: Yasli, Vowpal Vabbit, Liblinear.
+
+В файле **_prepare_data_and_benchmarking.ipynb_** расположен код, необходимый для подготовки датасетов в нужный формат для каждой системы, а также запуск и результаты сравнения.
+
 ### Avazu Dataset (https://www.kaggle.com/c/avazu-ctr-prediction)
 
 ##### SGD
 |               | Yasli        |Vowpal Wabbit|Liblinear       |
 | ------------- |--------------| ------------| -------------- |
-| fit time      |  4m57.680s    |   3m54.729s  |   12m2.031s    |
-| apply time    |  3m4.265s  |    1m57.846s  |      -         |
-| ROC AUC score |              |    0.65     |    0.6511019   |
+| fit time      |  4m44.840s    |   4m15.223s  |  -    |
+| apply time    |  2m3.056s |    2m8.978s |      -         |
+| ROC AUC score |   0.72548     |   0.727919  |   -  |
 
 ##### Adaptive
 |               | Yasli        |Vowpal Wabbit|Liblinear       |
 | ------------- |--------------| ------------| -------------- |
-| fit time      |  4m48.680s    |  3m41.199s  |   13m35.433s   |
-| apply time    |  3m6.199s    |  2m0.575s   |      -         |
-| ROC AUC score |   0.73076    |   0.735663  |   0.723977     |
+| fit time      | 4m34.449s   |  3m41.199s  |   -   |
+| apply time    |  2m3.847s    |  2m0.575s   |      -         |
+| ROC AUC score |   0.731246    |   0.735663  |   -    |
+
+##### FTRL
+|               | Yasli        |Vowpal Wabbit  |
+| ------------- |--------------| ------------|
+| fit time      |  3m39.782s    |  3m44.515s  |  
+| apply time    |  3m6.199s    |  2m0.287s  |  
+| ROC AUC score |   0.73076    |  0.7313928 | 
 
 ### Criteo Dataset (http://labs.criteo.com/2014/02/kaggle-display-advertising-challenge-dataset/)
 
 ##### SGD
 |               | Yasli        |Vowpal Wabbit|Liblinear       |
 | ------------- |--------------| ------------| -------------- |
-| fit time      |  9m51.092s    |  4m4.163s  |   -    |
-| apply time    |   2m59.514s |    2m23.315s  |      -         |
-| ROC AUC score |    0.57402    |   0.56402     |    -   |
+| fit time      |  9m10.360s   |  4m4.163s  |   -    |
+| apply time    |   2m58.486s |   2m24.252s |      -         |
+| ROC AUC score |    0.61391   |   0.56402     |    -   |
 
 ##### Adaptive
 |               | Yasli        |Vowpal Wabbit|Liblinear     |
 | ------------- |--------------| ------------| ------------ |
-| fit time      |  9m48.680s   |  3m48.278s |   79m58.181s   |
-| apply time    |  2m6.199s    |  2m1.829s |      -      |
-| ROC AUC score |   0.73076    |   0.727919  |   0.4951   |
+| fit time      |  9m46.675s   |  3m48.278s |   -   |
+| apply time    |  2m59.447s   |  2m23.315s |      -      |
+| ROC AUC score |   0.71296    |   0.77459475  |   -   |
+
+##### FTRL
+|               | Yasli        |Vowpal Wabbit  |
+| ------------- |--------------| ------------|
+| fit time      |  7m29.298s   |  3m59.173s |  
+| apply time    |  2m50.992s    | 2m18.430s |  
+| ROC AUC score |   0.767993    |  0.768009| 
 
 ## Authors
 
