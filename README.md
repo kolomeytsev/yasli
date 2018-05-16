@@ -94,9 +94,9 @@ $ ./yasli apply  -i <input path>  -o <output path> [optional parameters]
 ##### Adaptive
 |               | Yasli        |Vowpal Wabbit|
 | ------------- |--------------| ------------|
-| fit time      | 4m34.449s   |  3m41.199s  |
-| apply time    |  2m3.847s    |  2m0.575s   |
-| ROC AUC score |   0.731246    |   0.735663 |
+| fit time      | 4m43.143s   |  3m41.199s  |
+| apply time    | 2m1.257s    |  2m0.575s   |
+| ROC AUC score |   0.73107    |   0.735663 |
 
 ##### FTRL
 |               | Yasli        |Vowpal Wabbit  |
