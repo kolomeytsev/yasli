@@ -102,7 +102,7 @@ $ ./yasli apply  -i <input path>  -o <output path> [optional parameters]
 |               | Yasli        |Vowpal Wabbit  |
 | ------------- |--------------| ------------|
 | fit time      |  3m39.782s    |  3m44.515s  |  
-| apply time    |  3m6.199s    |  2m0.287s  |  
+| apply time    |  2m3.847s    |  2m0.287s  |  
 | ROC AUC score |   0.73076    |  0.7313928 | 
 
 ### Criteo Dataset (http://labs.criteo.com/2014/02/kaggle-display-advertising-challenge-dataset/)
